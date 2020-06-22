@@ -726,12 +726,12 @@
     invoke-static {v2, v0}, Ljava/lang/Math;->max(II)I
 
     move-result v0
+    
+    sget v0, Lcom/android/mwilky/Renovate;->mQsRows:I
 
     iput v0, p0, Lcom/android/systemui/qs/TileLayout;->mMaxAllowedRows:I
 
-    iget v0, p0, Lcom/android/systemui/qs/TileLayout;->mColumns:I
-
-    if-eq v0, v1, :cond_0
+    sget v1, Lcom/android/mwilky/Renovate;->mQsColumns:I
 
     iput v1, p0, Lcom/android/systemui/qs/TileLayout;->mColumns:I
 

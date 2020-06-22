@@ -135,7 +135,7 @@
 
     check-cast p0, Lcom/android/systemui/tuner/TunerService;
 
-    sget v0, Lcom/android/systemui/qs/QuickQSPanel;->mDefaultMaxTiles:I
+    sget v0, Lcom/android/mwilky/Renovate;->mQuickQsNumber:I
 
     const-string/jumbo v1, "sysui_qqs_count"
 
@@ -406,4 +406,14 @@
 
     :goto_0
     return p0
+.end method
+
+.method public updateTiles()V
+    .locals 1
+ 
+	sget v0, Lcom/android/mwilky/Renovate;->mQuickQsNumber:I
+
+	invoke-virtual {p0, v0}, Lcom/android/systemui/qs/QuickQSPanel;->setMaxTiles(I)V
+	
+    return-void
 .end method

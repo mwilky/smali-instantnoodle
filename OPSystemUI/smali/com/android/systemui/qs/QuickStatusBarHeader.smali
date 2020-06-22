@@ -28,7 +28,7 @@
 
 .field private mHasTopCutout:Z
 
-.field protected mHeaderQsPanel:Lcom/android/systemui/qs/QuickQSPanel;
+.field public mHeaderQsPanel:Lcom/android/systemui/qs/QuickQSPanel;
 
 .field private mHeaderTextContainerAlphaAnimator:Lcom/android/systemui/qs/TouchAnimator;
 

@@ -583,11 +583,7 @@
 
     move-result-object v2
 
-    sget v3, Lcom/android/systemui/R$integer;->quick_settings_num_columns:I
-
-    invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getInteger(I)I
-
-    move-result v9
+    sget v9, Lcom/android/mwilky/Renovate;->mQsColumns:I
 
     iget-object v2, p0, Lcom/android/systemui/qs/customize/QSEditPageManager;->mContext:Landroid/content/Context;
 
@@ -595,11 +591,7 @@
 
     move-result-object v2
 
-    sget v3, Lcom/android/systemui/R$integer;->quick_settings_max_rows:I
-
-    invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getInteger(I)I
-
-    move-result v7
+    sget v7, Lcom/android/mwilky/Renovate;->mQsRows:I
 
     iget-object v2, p0, Lcom/android/systemui/qs/customize/QSEditPageManager;->mContext:Landroid/content/Context;
 
