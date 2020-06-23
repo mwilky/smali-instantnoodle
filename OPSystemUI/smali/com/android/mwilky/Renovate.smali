@@ -4,6 +4,8 @@
 
 
 # static fields
+.field public static mHideLockscreenClock:Z
+
 .field public static mQsColumns:I
 
 .field public static mQsRows:I
@@ -23,16 +25,48 @@
     return-void
 .end method
 
-.method public static setQsTileLayout(Landroid/content/Context;)V
-    .registers 4
+.method public static setHideLockscreenClock(Landroid/content/Context;)V
+    .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 15
+    .line 28
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
+    .line 29
+    .local v0, "ContentResolver":Landroid/content/ContentResolver;
+    const/4 v1, 0x0
+
+    const-string v2, "tweaks_hide_lockscreen_clock"
+
+    invoke-static {v0, v2, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v2
+
+    const/4 v3, 0x1
+
+    if-ne v2, v3, :cond_f
+
+    move v1, v3
+
+    :cond_f
+    sput-boolean v1, Lcom/android/mwilky/Renovate;->mHideLockscreenClock:Z
+
+    .line 30
+    return-void
+.end method
+
+.method public static setQsTileLayout(Landroid/content/Context;)V
+    .registers 4
+    .param p0, "Context"    # Landroid/content/Context;
+
     .line 16
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v0
+
+    .line 17
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_rows"
 
@@ -44,7 +78,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsRows:I
 
-    .line 17
+    .line 18
     const-string v1, "tweaks_qs_columns"
 
     const/4 v2, 0x4
@@ -55,7 +89,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsColumns:I
 
-    .line 18
+    .line 19
     const-string v1, "tweaks_quick_qs_buttons"
 
     const/4 v2, 0x6
@@ -66,7 +100,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQuickQsNumber:I
 
-    .line 19
+    .line 20
     return-void
 .end method
 
@@ -74,12 +108,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 22
+    .line 23
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 23
+    .line 24
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const/4 v1, 0x0
 
@@ -98,6 +132,6 @@
     :cond_f
     sput-boolean v1, Lcom/android/mwilky/Renovate;->mScrambleKeypad:Z
 
-    .line 24
+    .line 25
     return-void
 .end method
