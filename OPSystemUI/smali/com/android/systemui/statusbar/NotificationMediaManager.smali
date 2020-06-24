@@ -1933,7 +1933,7 @@
 .end method
 
 .method public updateMediaMetaData(ZZ)V
-    .locals 7
+    .locals 8
 
     const-string v0, "StatusBar#updateMediaMetaData"
 
@@ -2053,6 +2053,10 @@
     const/4 v3, 0x0
 
     if-eqz v0, :cond_5
+    
+    sget-boolean v7, Lcom/android/mwilky/Renovate;->mHideLockscreenAlbumArt:Z
+    
+    if-nez v7, :cond_5
 
     const-string v5, "android.media.metadata.ART"
 
