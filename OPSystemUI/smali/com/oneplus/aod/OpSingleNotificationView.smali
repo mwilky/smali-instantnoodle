@@ -3,6 +3,10 @@
 .source "OpSingleNotificationView.java"
 
 
+# static fields
+.field public static mAppIconColor:I
+
+
 # instance fields
 .field private mContext:Landroid/content/Context;
 
@@ -221,6 +225,8 @@
     move-result v8
 
     :goto_1
+    sput v8, Lcom/oneplus/aod/OpSingleNotificationView;->mAppIconColor:I
+
     invoke-static {}, Lcom/oneplus/plugin/OpLsState;->getInstance()Lcom/oneplus/plugin/OpLsState;
 
     move-result-object v9
