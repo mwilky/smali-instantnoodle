@@ -13669,6 +13669,8 @@
    invoke-static {v0}, Lcom/android/mwilky/Renovate;->setOreoQs(Landroid/content/Context;)V
    
    invoke-static {v0}, Lcom/android/mwilky/Renovate;->setDarkQsIcons(Landroid/content/Context;)V
+   
+   invoke-static {v0}, Lcom/android/mwilky/Renovate;->setShowQsDetail(Landroid/content/Context;)V
 
     const-class v0, Lcom/android/systemui/statusbar/phone/NotificationGroupManager;
 
@@ -15842,6 +15844,10 @@
     const-string v1, "tweaks_dark_qs_icons"
 
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    
+    const-string v1, "tweaks_qs_detail"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     .line 102
     new-instance v1, Lcom/android/wubydax/GearContentObserver;
@@ -16219,6 +16225,21 @@
     invoke-virtual {p0}, Lcom/android/systemui/statusbar/phone/StatusBar;->reloadTiles()V
 
     :cond_mwilky16
+    const-string v0, "tweaks_qs_detail"
+
+    invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_mwilky17
+
+    iget-object v0, p0, Lcom/android/systemui/statusbar/phone/StatusBar;->mContext:Landroid/content/Context;
+
+    invoke-static {v0}, Lcom/android/mwilky/Renovate;->setShowQsDetail(Landroid/content/Context;)V
+
+    invoke-virtual {p0}, Lcom/android/systemui/statusbar/phone/StatusBar;->reloadTiles()V
+
+    :cond_mwilky17
     return-void
 .end method
 

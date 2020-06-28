@@ -342,7 +342,7 @@
 .end method
 
 .method private handleToggleStateChanged(ZZ)V
-    .locals 1
+    .locals 3
 
     iput-boolean p1, p0, Lcom/android/systemui/qs/QSDetail;->mSwitchState:Z
 
@@ -361,9 +361,27 @@
 
     invoke-virtual {p1, p2}, Landroid/view/View;->setEnabled(Z)V
 
-    iget-object p0, p0, Lcom/android/systemui/qs/QSDetail;->mQsDetailHeaderSwitch:Landroid/widget/Switch;
+    iget-object v0, p0, Lcom/android/systemui/qs/QSDetail;->mQsDetailHeaderSwitch:Landroid/widget/Switch;
 
-    invoke-virtual {p0, p2}, Landroid/widget/Switch;->setEnabled(Z)V
+    invoke-virtual {v0, p2}, Landroid/widget/Switch;->setEnabled(Z)V
+    
+    iget-object v0, p0, Lcom/android/systemui/qs/QSDetail;->mQsDetailHeaderSwitch:Landroid/widget/Switch;
+
+    invoke-static {}, Lcom/android/systemui/SystemUIApplication;->getContext()Landroid/content/Context;
+    
+    move-result-object v1
+
+    sget v2, Lcom/android/systemui/R$color;->qs_tile_icon:I
+
+    invoke-static {v1, v2}, Lcom/oneplus/util/OpUtils;->getThemeAccentColor(Landroid/content/Context;I)I
+
+    move-result v1
+
+    invoke-static {v1}, Landroid/content/res/ColorStateList;->valueOf(I)Landroid/content/res/ColorStateList;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Landroid/widget/Switch;->setThumbTintList(Landroid/content/res/ColorStateList;)V
 
     return-void
 .end method

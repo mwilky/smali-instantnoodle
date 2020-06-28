@@ -683,3 +683,11 @@
 
     return-void
 .end method
+
+.method public setSubscriptionId(I)V
+    .locals 0
+
+    iput p1, p0, Lcom/android/settingslib/net/DataUsageController;->mSubscriptionId:I
+
+    return-void
+.end method
