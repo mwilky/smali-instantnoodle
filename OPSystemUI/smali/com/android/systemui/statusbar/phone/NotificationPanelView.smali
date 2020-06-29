@@ -34,6 +34,10 @@
 
 
 # instance fields
+.field private final PANEL_ALPHA_IN_FAST_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+.field private final PANEL_ALPHA_OUT_FAST_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
 .field private final PANEL_ALPHA:Lcom/android/systemui/statusbar/notification/AnimatableProperty;
 
 .field private final PANEL_ALPHA_IN_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
@@ -498,6 +502,48 @@
     invoke-virtual {v0, v1, v2}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;->setCustomInterpolator(Landroid/util/Property;Landroid/view/animation/Interpolator;)Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
 
     iput-object v0, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA_IN_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+    
+    new-instance v0, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    invoke-direct {v0}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;-><init>()V
+
+    const-wide/16 v1, 0x64
+
+    invoke-virtual {v0, v1, v2}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;->setDuration(J)Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    iget-object v3, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA:Lcom/android/systemui/statusbar/notification/AnimatableProperty;
+
+    invoke-virtual {v3}, Lcom/android/systemui/statusbar/notification/AnimatableProperty;->getProperty()Landroid/util/Property;
+
+    move-result-object v3
+
+    sget-object v4, Lcom/android/systemui/Interpolators;->ALPHA_OUT:Landroid/view/animation/Interpolator;
+
+    invoke-virtual {v0, v3, v4}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;->setCustomInterpolator(Landroid/util/Property;Landroid/view/animation/Interpolator;)Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA_OUT_FAST_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    new-instance v0, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    invoke-direct {v0}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;-><init>()V
+
+    invoke-virtual {v0, v1, v2}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;->setDuration(J)Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    iget-object v1, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->mAnimatorListenerAdapter:Landroid/animation/AnimatorListenerAdapter;
+
+    invoke-virtual {v0, v1}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;->setAnimationFinishListener(Landroid/animation/AnimatorListenerAdapter;)Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    iget-object v1, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA:Lcom/android/systemui/statusbar/notification/AnimatableProperty;
+
+    invoke-virtual {v1}, Lcom/android/systemui/statusbar/notification/AnimatableProperty;->getProperty()Landroid/util/Property;
+
+    move-result-object v1
+
+    sget-object v2, Lcom/android/systemui/Interpolators;->ALPHA_IN:Landroid/view/animation/Interpolator;
+
+    invoke-virtual {v0, v1, v2}, Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;->setCustomInterpolator(Landroid/util/Property;Landroid/view/animation/Interpolator;)Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA_IN_FAST_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
 
     const-class v0, Lcom/android/systemui/statusbar/notification/NotificationEntryManager;
 
@@ -4837,9 +4883,13 @@
     invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     :cond_2
-    iget-object p0, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->mNotificationStackScroller:Lcom/android/systemui/statusbar/notification/stack/NotificationStackScrollLayout;
+    iget-object v1, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->mNotificationStackScroller:Lcom/android/systemui/statusbar/notification/stack/NotificationStackScrollLayout;
 
-    invoke-virtual {p0, v0}, Landroid/view/ViewGroup;->setAlpha(F)V
+    invoke-virtual {v1, v0}, Landroid/view/ViewGroup;->setAlpha(F)V
+
+    iget-object v0, p0, Lcom/android/systemui/statusbar/phone/PanelView;->mStatusBar:Lcom/android/systemui/statusbar/phone/StatusBar;
+
+    invoke-virtual {v0}, Lcom/android/systemui/statusbar/phone/StatusBar;->updateBlurVisibility()V
 
     return-void
 .end method
@@ -10742,4 +10792,41 @@
     invoke-virtual {v0}, Lcom/android/keyguard/KeyguardStatusView;->setClockVisibility()V
     
     return-void
+.end method
+
+.method public setPanelAlphaFast(IZ)Z
+    .locals 3
+
+    iget v0, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->mPanelAlpha:I
+
+    if-eq v0, p1, :cond_1
+
+    iput p1, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->mPanelAlpha:I
+
+    iget-object v0, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA:Lcom/android/systemui/statusbar/notification/AnimatableProperty;
+
+    int-to-float v1, p1
+
+    const/16 v2, 0xff
+
+    if-ne p1, v2, :cond_0
+
+    iget-object p1, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA_IN_FAST_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    goto :goto_0
+
+    :cond_0
+    iget-object p1, p0, Lcom/android/systemui/statusbar/phone/NotificationPanelView;->PANEL_ALPHA_OUT_FAST_PROPERTIES:Lcom/android/systemui/statusbar/notification/stack/AnimationProperties;
+
+    :goto_0
+    invoke-static {p0, v0, v1, p1, p2}, Lcom/android/systemui/statusbar/notification/PropertyAnimator;->setProperty(Landroid/view/View;Lcom/android/systemui/statusbar/notification/AnimatableProperty;FLcom/android/systemui/statusbar/notification/stack/AnimationProperties;Z)V
+
+    const/4 p0, 0x1
+
+    return p0
+
+    :cond_1
+    const/4 p0, 0x0
+
+    return p0
 .end method
