@@ -17,6 +17,10 @@
 .end annotation
 
 
+# static fields
+.field public static mIsExpanded:Z
+
+
 # instance fields
 .field private final mActivityManager:Landroid/app/IActivityManager;
 
@@ -668,7 +672,13 @@
 .end method
 
 .method private applyForceStatusBarVisibleFlag(Lcom/android/systemui/statusbar/phone/StatusBarWindowController$State;)V
-    .locals 4
+    .locals 5
+    
+    invoke-direct {p0, p1}, Lcom/android/systemui/statusbar/phone/StatusBarWindowController;->isExpandedScrim(Lcom/android/systemui/statusbar/phone/StatusBarWindowController$State;)Z
+
+    move-result v4
+    
+    sput-boolean v4, Lcom/android/systemui/statusbar/phone/StatusBarWindowController;->mIsExpanded:Z
 
     invoke-direct {p0, p1}, Lcom/android/systemui/statusbar/phone/StatusBarWindowController;->isExpanded(Lcom/android/systemui/statusbar/phone/StatusBarWindowController$State;)Z
 
@@ -2101,4 +2111,12 @@
     invoke-direct {p0, v0}, Lcom/android/systemui/statusbar/phone/StatusBarWindowController;->apply(Lcom/android/systemui/statusbar/phone/StatusBarWindowController$State;)V
 
     return-void
+.end method
+
+.method private isExpandedScrim(Lcom/android/systemui/statusbar/phone/StatusBarWindowController$State;)Z
+    .locals 0
+
+    iget-boolean p0, p1, Lcom/android/systemui/statusbar/phone/StatusBarWindowController$State;->panelVisible:Z
+
+    return p0
 .end method

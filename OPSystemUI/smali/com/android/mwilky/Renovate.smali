@@ -8,6 +8,8 @@
 
 .field public static mDarkQsIcons:Z
 
+.field public static mDisableQsScrim:Z
+
 .field public static mFingerprintDisabledColor:I
 
 .field public static mFingerprintFlashColor:I
@@ -27,6 +29,8 @@
 .field public static mHideQsLabels:Z
 
 .field public static mHideQsStatusbarIconView:Z
+
+.field public static mLockscreenScrimColor:I
 
 .field public static mOreoQs:Z
 
@@ -52,6 +56,8 @@
 
 .field public static mQsRows:I
 
+.field public static mQsScrimColor:I
+
 .field public static mQsVibration:Z
 
 .field public static mQuickQsNumber:I
@@ -65,6 +71,12 @@
 .field public static mSmartPulldown:I
 
 .field public static mUnlockFingerprintColors:Z
+
+.field public static mUnlockLockscreenScrimColors:Z
+
+.field public static mUnlockQsColors:Z
+
+.field public static mUnlockQsScrimColors:Z
 
 .field public static mUseAppColorForFp:Z
 
@@ -83,12 +95,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 85
+    .line 90
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 86
+    .line 91
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
@@ -106,52 +118,20 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mAlbumArtBlurAmount:F
 
-    .line 87
+    .line 92
     return-void
 .end method
 
-.method public static setDarkQsIcons(Landroid/content/Context;)V
+.method public static setColorChanges(Landroid/content/Context;)V
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 100
+    .line 169
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 101
-    .local v0, "ContentResolver":Landroid/content/ContentResolver;
-    const-string v1, "tweaks_dark_qs_icons"
-
-    const/4 v2, 0x0
-
-    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
-
-    move-result v1
-
-    const/4 v3, 0x1
-
-    if-ne v1, v3, :cond_f
-
-    move v2, v3
-
-    :cond_f
-    sput-boolean v2, Lcom/android/mwilky/Renovate;->mDarkQsIcons:Z
-
-    .line 102
-    return-void
-.end method
-
-.method public static setFpIconColors(Landroid/content/Context;)V
-    .registers 5
-    .param p0, "Context"    # Landroid/content/Context;
-
-    .line 76
-    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v0
-
-    .line 77
+    .line 170
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_unlock_fp_colors"
 
@@ -175,8 +155,70 @@
     :goto_11
     sput-boolean v1, Lcom/android/mwilky/Renovate;->mUnlockFingerprintColors:Z
 
-    .line 78
+    .line 171
+    const-string v1, "tweaks_unlock_qs_colors"
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    if-ne v1, v3, :cond_1c
+
+    move v2, v3
+
+    :cond_1c
+    sput-boolean v2, Lcom/android/mwilky/Renovate;->mUnlockQsColors:Z
+
+    .line 172
+    return-void
+.end method
+
+.method public static setDarkQsIcons(Landroid/content/Context;)V
+    .registers 5
+    .param p0, "Context"    # Landroid/content/Context;
+
+    .line 105
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v0
+
+    .line 106
+    .local v0, "ContentResolver":Landroid/content/ContentResolver;
+    const-string v1, "tweaks_dark_qs_icons"
+
+    const/4 v2, 0x0
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    const/4 v3, 0x1
+
+    if-ne v1, v3, :cond_f
+
+    move v2, v3
+
+    :cond_f
+    sput-boolean v2, Lcom/android/mwilky/Renovate;->mDarkQsIcons:Z
+
+    .line 107
+    return-void
+.end method
+
+.method public static setFpIconColors(Landroid/content/Context;)V
+    .registers 5
+    .param p0, "Context"    # Landroid/content/Context;
+
+    .line 82
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v0
+
+    .line 83
+    .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_fp_normal_color"
+
+    const/4 v2, 0x0
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
 
@@ -184,7 +226,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mFingerprintNormalColor:I
 
-    .line 79
+    .line 84
     const-string v1, "tweaks_fp_flash_color"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -193,7 +235,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mFingerprintFlashColor:I
 
-    .line 80
+    .line 85
     const-string v1, "tweaks_fp_disabled_color"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -202,21 +244,23 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mFingerprintDisabledColor:I
 
-    .line 81
+    .line 86
     const-string v1, "tweaks_fp_app_color"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
 
     move-result v1
 
-    if-ne v1, v3, :cond_34
+    const/4 v3, 0x1
+
+    if-ne v1, v3, :cond_27
 
     move v2, v3
 
-    :cond_34
+    :cond_27
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mUseAppColorForFp:Z
 
-    .line 82
+    .line 87
     return-void
 .end method
 
@@ -224,12 +268,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 66
+    .line 72
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 67
+    .line 73
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_hide_lockscreen_album_art"
 
@@ -248,7 +292,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mHideLockscreenAlbumArt:Z
 
-    .line 68
+    .line 74
     return-void
 .end method
 
@@ -256,12 +300,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 56
+    .line 62
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 57
+    .line 63
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_hide_lockscreen_clock"
 
@@ -280,7 +324,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mHideLockscreenClock:Z
 
-    .line 58
+    .line 64
     return-void
 .end method
 
@@ -288,12 +332,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 71
+    .line 77
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 72
+    .line 78
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_hide_lockscreen_shortcuts"
 
@@ -312,7 +356,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mHideLockscreenShortcuts:Z
 
-    .line 73
+    .line 79
     return-void
 .end method
 
@@ -320,12 +364,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 61
+    .line 67
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 62
+    .line 68
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_hide_lockscreen_statusbar"
 
@@ -344,7 +388,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mHideLockscreenStatusbar:Z
 
-    .line 63
+    .line 69
     return-void
 .end method
 
@@ -352,12 +396,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 116
+    .line 121
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 117
+    .line 122
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_hide_qs_labels"
 
@@ -376,7 +420,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mHideQsLabels:Z
 
-    .line 118
+    .line 123
     return-void
 .end method
 
@@ -384,12 +428,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 95
+    .line 100
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 96
+    .line 101
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_oreo_qs"
 
@@ -408,7 +452,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mOreoQs:Z
 
-    .line 97
+    .line 102
     return-void
 .end method
 
@@ -416,12 +460,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 145
+    .line 150
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 146
+    .line 151
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qstile_animation_style"
 
@@ -433,7 +477,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsAnimationStyle:I
 
-    .line 147
+    .line 152
     const-string v1, "tweaks_qstile_animation_duration"
 
     const/16 v3, 0x7d0
@@ -444,7 +488,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsAnimationDuration:I
 
-    .line 148
+    .line 153
     const-string v1, "tweaks_qstile_animation_interpolator"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -453,7 +497,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsAnimationInterpolator:I
 
-    .line 149
+    .line 154
     const-string v1, "tweaks_qs_anim_expand"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -474,7 +518,7 @@
     :goto_2b
     sput-boolean v1, Lcom/android/mwilky/Renovate;->mQsAnimExpand:Z
 
-    .line 150
+    .line 155
     const-string v1, "tweaks_qs_anim_click"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -488,7 +532,7 @@
     :cond_36
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mQsAnimClick:Z
 
-    .line 151
+    .line 156
     return-void
 .end method
 
@@ -496,12 +540,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 121
+    .line 126
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 122
+    .line 127
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_blur_enabled"
 
@@ -523,7 +567,7 @@
     :goto_10
     sput-boolean v3, Lcom/android/mwilky/Renovate;->mQsBlurEnabled:Z
 
-    .line 123
+    .line 128
     const-string v1, "tweaks_qs_blur"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -532,7 +576,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsBlur:I
 
-    .line 124
+    .line 129
     const/16 v1, 0x64
 
     const-string v2, "tweaks_qs_blur_alpha"
@@ -543,7 +587,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsBlurAlpha:I
 
-    .line 125
+    .line 130
     return-void
 .end method
 
@@ -551,12 +595,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 90
+    .line 95
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 91
+    .line 96
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_vibrate_expansion"
 
@@ -575,7 +619,98 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mQsExpandVibration:Z
 
-    .line 92
+    .line 97
+    return-void
+.end method
+
+.method public static setQsScrimColors(Landroid/content/Context;)V
+    .registers 5
+    .param p0, "Context"    # Landroid/content/Context;
+
+    .line 159
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v0
+
+    .line 160
+    .local v0, "ContentResolver":Landroid/content/ContentResolver;
+    const-string v1, "tweaks_unlock_qs_scrim_color"
+
+    const/4 v2, 0x0
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    const/4 v3, 0x1
+
+    if-ne v1, v3, :cond_10
+
+    move v1, v3
+
+    goto :goto_11
+
+    :cond_10
+    move v1, v2
+
+    :goto_11
+    sput-boolean v1, Lcom/android/mwilky/Renovate;->mUnlockQsScrimColors:Z
+
+    .line 161
+    const-string v1, "tweaks_qs_scrim_color"
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    sput v1, Lcom/android/mwilky/Renovate;->mQsScrimColor:I
+
+    .line 162
+    const-string v1, "tweaks_disable_qs_scrim"
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    if-ne v1, v3, :cond_25
+
+    move v1, v3
+
+    goto :goto_26
+
+    :cond_25
+    move v1, v2
+
+    :goto_26
+    sput-boolean v1, Lcom/android/mwilky/Renovate;->mDisableQsScrim:Z
+
+    .line 163
+    const-string v1, "tweaks_unlock_lockscreen_scrim_color"
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    if-ne v1, v3, :cond_31
+
+    goto :goto_32
+
+    :cond_31
+    move v3, v2
+
+    :goto_32
+    sput-boolean v3, Lcom/android/mwilky/Renovate;->mUnlockLockscreenScrimColors:Z
+
+    .line 164
+    const-string v1, "tweaks_lockscreen_scrim_color"
+
+    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+
+    move-result v1
+
+    sput v1, Lcom/android/mwilky/Renovate;->mLockscreenScrimColor:I
+
+    .line 166
     return-void
 .end method
 
@@ -583,12 +718,12 @@
     .registers 4
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 44
+    .line 50
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 45
+    .line 51
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_rows"
 
@@ -600,7 +735,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsRows:I
 
-    .line 46
+    .line 52
     const-string v1, "tweaks_qs_columns"
 
     const/4 v2, 0x4
@@ -611,7 +746,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQsColumns:I
 
-    .line 47
+    .line 53
     const-string v1, "tweaks_quick_qs_buttons"
 
     const/4 v2, 0x6
@@ -622,7 +757,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQuickQsNumber:I
 
-    .line 48
+    .line 54
     return-void
 .end method
 
@@ -630,12 +765,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 110
+    .line 115
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 111
+    .line 116
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_vibration"
 
@@ -654,7 +789,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mQsVibration:Z
 
-    .line 113
+    .line 118
     return-void
 .end method
 
@@ -662,12 +797,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 139
+    .line 144
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 140
+    .line 145
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_hide_qs_date_view"
 
@@ -691,7 +826,7 @@
     :goto_11
     sput-boolean v1, Lcom/android/mwilky/Renovate;->mHideQsDateView:Z
 
-    .line 141
+    .line 146
     const-string v1, "tweaks_hide_qs_statusbar_icons_view"
 
     invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
@@ -705,7 +840,7 @@
     :cond_1c
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mHideQsStatusbarIconView:Z
 
-    .line 142
+    .line 147
     return-void
 .end method
 
@@ -713,12 +848,12 @@
     .registers 4
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 133
+    .line 138
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 134
+    .line 139
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_pulldown_list"
 
@@ -730,7 +865,7 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mQuickQsPulldown:I
 
-    .line 136
+    .line 141
     return-void
 .end method
 
@@ -738,12 +873,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 51
+    .line 57
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 52
+    .line 58
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_scramble_pin"
 
@@ -762,7 +897,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mScrambleKeypad:Z
 
-    .line 53
+    .line 59
     return-void
 .end method
 
@@ -770,12 +905,12 @@
     .registers 5
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 105
+    .line 110
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 106
+    .line 111
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_qs_detail"
 
@@ -794,7 +929,7 @@
     :cond_f
     sput-boolean v2, Lcom/android/mwilky/Renovate;->mShowQsDetail:Z
 
-    .line 107
+    .line 112
     return-void
 .end method
 
@@ -802,12 +937,12 @@
     .registers 4
     .param p0, "Context"    # Landroid/content/Context;
 
-    .line 128
+    .line 133
     invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
     move-result-object v0
 
-    .line 129
+    .line 134
     .local v0, "ContentResolver":Landroid/content/ContentResolver;
     const-string v1, "tweaks_smart_pulldown"
 
@@ -819,6 +954,6 @@
 
     sput v1, Lcom/android/mwilky/Renovate;->mSmartPulldown:I
 
-    .line 130
+    .line 135
     return-void
 .end method
