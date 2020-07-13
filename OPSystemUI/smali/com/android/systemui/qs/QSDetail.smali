@@ -1241,7 +1241,7 @@
     return-void
 .end method
 
-.method protected updateThemeColor()V
+.method public updateThemeColor()V
     .locals 4
 
     sget v0, Lcom/oneplus/util/ThemeColorUtils;->QS_PRIMARY_TEXT:I
@@ -1257,11 +1257,21 @@
     move-result v1
 
     sget v2, Lcom/oneplus/util/ThemeColorUtils;->QS_PANEL_PRIMARY:I
+    
+    sget-boolean v3, Lcom/android/mwilky/Renovate;->mUnlockQsColors:Z
+    
+    if-eqz v3, :cond_stock
 
+    sget v2, Lcom/android/mwilky/Renovate;->mQsBackgroundColor:I
+
+    goto :goto_mw
+
+    :cond_stock
     invoke-static {v2}, Lcom/oneplus/util/ThemeColorUtils;->getColor(I)I
 
     move-result v2
 
+	:goto_mw
     iget-object v3, p0, Lcom/android/systemui/qs/QSDetail;->mDetailSettingsButton:Landroid/widget/TextView;
 
     invoke-virtual {v3, v1}, Landroid/widget/TextView;->setTextColor(I)V

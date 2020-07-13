@@ -43,6 +43,8 @@
 
 
 # instance fields
+.field private mQs:Lcom/android/systemui/plugins/qs/QS;
+
 .field private blurperformed:Z
 
 .field public mQSBlurView:Landroid/widget/ImageView;
@@ -8067,6 +8069,8 @@
     .locals 0
 
     check-cast p2, Lcom/android/systemui/plugins/qs/QS;
+    
+    iput-object p2, p0, Lcom/android/systemui/statusbar/phone/StatusBar;->mQs:Lcom/android/systemui/plugins/qs/QS;
 
     instance-of p1, p2, Lcom/android/systemui/qs/QSFragment;
 
@@ -13715,6 +13719,8 @@
     invoke-static {v0}, Lcom/android/mwilky/Renovate;->setQsAnimationValues(Landroid/content/Context;)V
     
     invoke-static {v0}, Lcom/android/mwilky/Renovate;->setQsScrimColors(Landroid/content/Context;)V
+    
+    invoke-static {v0}, Lcom/android/mwilky/Renovate;->setQsBackgroundColor(Landroid/content/Context;)V
 
     const-class v0, Lcom/android/systemui/statusbar/phone/NotificationGroupManager;
 
@@ -15972,6 +15978,10 @@
     const-string v1, "tweaks_unlock_lockscreen_scrim_color"
 
     invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    
+    const-string v1, "tweaks_qs_background_color"
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     .line 102
     new-instance v1, Lcom/android/wubydax/GearContentObserver;
@@ -16611,6 +16621,8 @@
     
     invoke-static {v0}, Lcom/android/mwilky/Renovate;->setColorChanges(Landroid/content/Context;)V
     
+    invoke-virtual {p0}, Lcom/android/systemui/statusbar/phone/StatusBar;->updateQsBackground()V
+    
     :cond_mwilky35
     const-string v0, "tweaks_lockscreen_scrim_color"
 
@@ -16638,6 +16650,23 @@
     invoke-static {v0}, Lcom/android/mwilky/Renovate;->setQsScrimColors(Landroid/content/Context;)V
 
     :cond_mwilky37
+    const-string v0, "tweaks_qs_background_color"
+
+    invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_mwilky38
+
+    iget-object v0, p0, Lcom/android/systemui/statusbar/phone/StatusBar;->mContext:Landroid/content/Context;
+
+    invoke-static {v0}, Lcom/android/mwilky/Renovate;->setColorChanges(Landroid/content/Context;)V
+
+    invoke-static {v0}, Lcom/android/mwilky/Renovate;->setQsBackgroundColor(Landroid/content/Context;)V
+
+    invoke-virtual {p0}, Lcom/android/systemui/statusbar/phone/StatusBar;->updateQsBackground()V
+
+    :cond_mwilky38
     return-void
 .end method
 
@@ -17066,6 +17095,32 @@
     check-cast v0, Lcom/android/systemui/qs/QuickStatusBarHeader;
 
     invoke-virtual {v0}, Lcom/android/systemui/qs/QuickStatusBarHeader;->setViewsVisibility()V
+
+    return-void
+.end method
+
+.method public updateQsBackground()V
+    .locals 2
+
+	iget-object v0, p0, Lcom/android/systemui/statusbar/phone/StatusBar;->mQs:Lcom/android/systemui/plugins/qs/QS;
+
+    check-cast v0, Lcom/android/systemui/qs/QSFragment;
+
+    iget-object v1, v0, Lcom/android/systemui/qs/QSFragment;->mContainer:Lcom/android/systemui/qs/QSContainerImpl;
+
+    invoke-virtual {v1}, Lcom/android/systemui/qs/QSContainerImpl;->updateThemeColor()V
+    
+    iget-object v1, v0, Lcom/android/systemui/qs/QSFragment;->mQSDetail:Lcom/android/systemui/qs/QSDetail;
+
+    invoke-virtual {v1}, Lcom/android/systemui/qs/QSDetail;->updateThemeColor()V
+
+    iget-object v0, p0, Lcom/android/systemui/statusbar/phone/StatusBar;->mQSPanel:Lcom/android/systemui/qs/QSPanel;
+
+    invoke-virtual {v0}, Lcom/android/systemui/qs/QSPanel;->updateThemeColor()V
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/phone/StatusBar;->mQSPanel:Lcom/android/systemui/qs/QSPanel;
+    
+    invoke-virtual {v0}, Lcom/android/systemui/qs/QSPanel;->updateCustomizer()V
 
     return-void
 .end method

@@ -1166,11 +1166,21 @@
     .locals 10
 
     sget v0, Lcom/oneplus/util/ThemeColorUtils;->QS_PANEL_PRIMARY:I
+    
+    sget-boolean v1, Lcom/android/mwilky/Renovate;->mUnlockQsColors:Z
+    
+    if-eqz v1, :cond_stock
 
+    sget v0, Lcom/android/mwilky/Renovate;->mQsBackgroundColor:I
+
+    goto :goto_mw
+
+    :cond_stock
     invoke-static {v0}, Lcom/oneplus/util/ThemeColorUtils;->getColor(I)I
 
     move-result v0
 
+    :goto_mw
     sget v1, Lcom/oneplus/util/ThemeColorUtils;->QS_BUTTON:I
 
     invoke-static {v1}, Lcom/oneplus/util/ThemeColorUtils;->getColor(I)I
@@ -1356,6 +1366,8 @@
 
 .method public updateCustomizer()V
     .locals 1
+    
+    invoke-virtual {p0}, Lcom/android/systemui/qs/customize/QSCustomizer;->updateThemeColor()V
 
 	iget-object v0, p0, Lcom/android/systemui/qs/customize/QSCustomizer;->mTileQueryHelper:Lcom/android/systemui/qs/customize/TileQueryHelper;
 
