@@ -2110,4 +2110,6 @@ Credential storage might not enable"</string>
     <string name="zzz_op_direct_boot_inputmethod_unaware_dialog_message">"If you restart your phone and have a screen lock set, this keyboard can't start until you unlock your phone"</string>
     <string name="zzz_op_ime_security_warning">%1$s may be able to collect all the text you type, including personal data like passwords and credit card numbers</string>
     <string name="zzz_op_ime_warning_confirm">TURN ON</string>
+    <string name="service_background_processes">%1$s free</string>
+    <string name="service_foreground_processes">%1$s used</string>
 </resources>

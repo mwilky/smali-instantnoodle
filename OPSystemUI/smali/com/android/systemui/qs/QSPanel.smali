@@ -21,6 +21,18 @@
 
 
 # instance fields
+.field private mAm:Landroid/app/ActivityManager;
+
+.field private mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+.field private mMemoryFreeTextView:Landroid/widget/TextView;
+
+.field private mMemoryUsedTextView:Landroid/widget/TextView;
+
+.field private mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+.field private final updateRamBarTask:Ljava/lang/Runnable;
+
 .field private mBrightnessController:Lcom/android/systemui/settings/BrightnessController;
 
 .field private mBrightnessMirror:Landroid/view/View;
@@ -281,6 +293,14 @@
     iput-object p1, p0, Lcom/android/systemui/qs/QSPanel;->mBrightnessController:Lcom/android/systemui/settings/BrightnessController;
 
     iput-object p3, p0, Lcom/android/systemui/qs/QSPanel;->mDumpController:Lcom/android/systemui/DumpController;
+    
+    new-instance v0, Lcom/android/systemui/qs/-$$Lambda$QSPanel$6QXPx0Z95i-89Mp1Uhf4Ts-ARGE;
+
+    invoke-direct {v0, p0}, Lcom/android/systemui/qs/-$$Lambda$QSPanel$6QXPx0Z95i-89Mp1Uhf4Ts-ARGE;-><init>(Lcom/android/systemui/qs/QSPanel;)V
+
+    iput-object v0, p0, Lcom/android/systemui/qs/QSPanel;->updateRamBarTask:Ljava/lang/Runnable;
+
+    invoke-direct {p0}, Lcom/android/systemui/qs/QSPanel;->createRamBar()V
 
     invoke-virtual {p0}, Lcom/android/systemui/qs/QSPanel;->updateResources()V
 
@@ -1723,6 +1743,8 @@
     invoke-static {v1, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     iput-boolean p1, p0, Lcom/android/systemui/qs/QSPanel;->mListening:Z
+    
+    invoke-direct {p0}, Lcom/android/systemui/qs/QSPanel;->updateRamBarMemoryUsage()V
 
     iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mTileLayout:Lcom/android/systemui/qs/QSPanel$QSTileLayout;
 
@@ -2857,5 +2879,723 @@
     invoke-virtual {p0, p2}, Lcom/android/systemui/qs/QSPanel;->setSwipeAnimationTile(Lcom/android/systemui/plugins/qs/QSTileView;)V
 
     :cond_mw
+    return-void
+.end method
+
+.method private updateRamBarMemoryUsage()V
+    .registers 2
+
+    .line 42
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->updateRamBarTask:Ljava/lang/Runnable;
+
+    invoke-virtual {p0, v0}, Lcom/android/systemui/qs/QSPanel;->removeCallbacks(Ljava/lang/Runnable;)Z
+
+    .line 43
+    sget v0, Lcom/android/mwilky/Renovate;->mQsRamBar:I
+
+    if-eqz v0, :cond_18
+
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    if-eqz v0, :cond_18
+
+    invoke-virtual {v0}, Lcom/android/mwilky/LinearColorBar;->isAttachedToWindow()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_18
+
+    .line 44
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->updateRamBarTask:Ljava/lang/Runnable;
+
+    invoke-virtual {p0, v0}, Lcom/android/systemui/qs/QSPanel;->post(Ljava/lang/Runnable;)Z
+
+    .line 46
+    :cond_18
+    return-void
+.end method
+
+.method public updateRamBarMode()V
+    .registers 3
+
+    .line 31
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    if-eqz v0, :cond_1d
+
+    .line 32
+    invoke-virtual {p0, v0}, Lcom/android/systemui/qs/QSPanel;->removeView(Landroid/view/View;)V
+
+    .line 33
+    sget v0, Lcom/android/mwilky/Renovate;->mQsRamBar:I
+
+    const/4 v1, 0x1
+
+    if-ne v0, v1, :cond_13
+
+    .line 34
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    const/4 v1, 0x0
+
+    invoke-virtual {p0, v0, v1}, Lcom/android/systemui/qs/QSPanel;->addView(Landroid/view/View;I)V
+
+    goto :goto_1d
+
+    .line 35
+    :cond_13
+    sget v0, Lcom/android/mwilky/Renovate;->mQsRamBar:I
+
+    const/4 v1, 0x2
+
+    if-ne v0, v1, :cond_1d
+
+    .line 36
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {p0, v0}, Lcom/android/systemui/qs/QSPanel;->addView(Landroid/view/View;)V
+
+    .line 39
+    :cond_1d
+    :goto_1d
+    return-void
+.end method
+
+.method public synthetic lambda$new$0$QSPanel()V
+    .registers 22
+
+    .line 85
+    move-object/from16 v0, p0
+
+    iget-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mAm:Landroid/app/ActivityManager;
+
+    if-nez v1, :cond_12
+
+    .line 86
+    iget-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    const-string v2, "activity"
+
+    invoke-virtual {v1, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/app/ActivityManager;
+
+    iput-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mAm:Landroid/app/ActivityManager;
+
+    .line 88
+    :cond_12
+    iget-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+    if-nez v1, :cond_1d
+
+    .line 89
+    new-instance v1, Lcom/android/mwilky/MemInfoReader;
+
+    invoke-direct {v1}, Lcom/android/mwilky/MemInfoReader;-><init>()V
+
+    iput-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+    .line 93
+    :cond_1d
+    iget-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v1}, Lcom/android/mwilky/LinearColorBar;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/widget/LinearLayout$LayoutParams;
+
+    .line 94
+    .local v1, "lp":Landroid/widget/LinearLayout$LayoutParams;
+    const/high16 v2, 0x41d00000    # 26.0f
+
+    .line 95
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v3
+
+    .line 94
+    const/4 v4, 0x1
+
+    invoke-static {v4, v2, v3}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v2
+
+    invoke-static {v2}, Ljava/lang/Math;->round(F)I
+
+    move-result v2
+
+    .line 99
+    .local v2, "sideMargin":I
+    sget v3, Lcom/android/mwilky/Renovate;->mQsRamBar:I
+
+    const/4 v5, 0x2
+
+    const/high16 v6, 0x41a00000    # 20.0f
+
+    const/4 v7, 0x0
+
+    if-ne v3, v5, :cond_64
+
+    .line 101
+    const/high16 v3, 0x41700000    # 15.0f
+
+    .line 102
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v5
+
+    invoke-virtual {v5}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v5
+
+    .line 101
+    invoke-static {v4, v3, v5}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v3
+
+    invoke-static {v3}, Ljava/lang/Math;->round(F)I
+
+    move-result v3
+
+    .line 103
+    .local v3, "topMargin":I
+    nop
+
+    .line 104
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v5
+
+    invoke-virtual {v5}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v5
+
+    .line 103
+    invoke-static {v4, v6, v5}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v5
+
+    invoke-static {v5}, Ljava/lang/Math;->round(F)I
+
+    move-result v5
+
+    .local v5, "bottomMargin":I
+    goto :goto_86
+
+    .line 107
+    .end local v3    # "topMargin":I
+    .end local v5    # "bottomMargin":I
+    :cond_64
+    nop
+
+    .line 108
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v3
+
+    .line 107
+    invoke-static {v4, v6, v3}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v3
+
+    invoke-static {v3}, Ljava/lang/Math;->round(F)I
+
+    move-result v3
+
+    .line 109
+    .restart local v3    # "topMargin":I
+    nop
+
+    .line 110
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v5
+
+    invoke-virtual {v5}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v5
+
+    .line 109
+    invoke-static {v4, v7, v5}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v5
+
+    invoke-static {v5}, Ljava/lang/Math;->round(F)I
+
+    move-result v5
+
+    .line 112
+    .restart local v5    # "bottomMargin":I
+    :goto_86
+    invoke-virtual {v1, v2, v3, v2, v5}, Landroid/widget/LinearLayout$LayoutParams;->setMargins(IIII)V
+
+    .line 113
+    iget-object v6, v0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v6, v1}, Lcom/android/mwilky/LinearColorBar;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+
+    .line 115
+    const/high16 v6, 0x40c00000    # 6.0f
+
+    .line 116
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v8
+
+    invoke-virtual {v8}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v8
+
+    .line 115
+    invoke-static {v4, v6, v8}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v6
+
+    invoke-static {v6}, Ljava/lang/Math;->round(F)I
+
+    move-result v6
+
+    .line 118
+    .local v6, "hPadding":I
+    sget v8, Lcom/android/mwilky/Renovate;->mQsRamBarHeight:I
+
+    int-to-float v8, v8
+
+    .line 119
+    invoke-virtual/range {p0 .. p0}, Lcom/android/systemui/qs/QSPanel;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v9
+
+    invoke-virtual {v9}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v9
+
+    .line 118
+    invoke-static {v4, v8, v9}, Landroid/util/TypedValue;->applyDimension(IFLandroid/util/DisplayMetrics;)F
+
+    move-result v8
+
+    invoke-static {v8}, Ljava/lang/Math;->round(F)I
+
+    move-result v8
+
+    .line 120
+    .local v8, "vPadding":I
+    iget-object v9, v0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v9, v6, v8, v6, v8}, Lcom/android/mwilky/LinearColorBar;->setPadding(IIII)V
+
+    .line 123
+    iget-object v9, v0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    sget v10, Lcom/android/mwilky/Renovate;->mQsRamBarUsedBackgroundColor:I
+
+    invoke-virtual {v9, v10}, Lcom/android/mwilky/LinearColorBar;->setLeftColor(I)V
+
+    .line 124
+    iget-object v9, v0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    sget v10, Lcom/android/mwilky/Renovate;->mQsRamBarFreeBackgroundColor:I
+
+    invoke-virtual {v9, v10}, Lcom/android/mwilky/LinearColorBar;->setRightColor(I)V
+
+    .line 125
+    iget-object v9, v0, Lcom/android/systemui/qs/QSPanel;->mMemoryUsedTextView:Landroid/widget/TextView;
+
+    sget v10, Lcom/android/mwilky/Renovate;->mQsRamBarUsedTextColor:I
+
+    sget v11, Lcom/android/mwilky/Renovate;->mQsRamBarUsedBackgroundColor:I
+
+    const-wide/high16 v12, 0x4000000000000000L    # 2.0
+
+    invoke-static {v10, v11, v4, v12, v13}, Lcom/android/internal/util/ContrastColorUtil;->findContrastColor(IIZD)I
+
+    move-result v10
+
+    invoke-virtual {v9, v10}, Landroid/widget/TextView;->setTextColor(I)V
+
+    .line 126
+    sget-boolean v9, Lcom/android/mwilky/Renovate;->mUnlockQsColors:Z
+
+    if-eqz v9, :cond_e7
+
+    .line 127
+    iget-object v9, v0, Lcom/android/systemui/qs/QSPanel;->mMemoryFreeTextView:Landroid/widget/TextView;
+
+    sget v10, Lcom/android/mwilky/Renovate;->mQsRamBarFreeTextColor:I
+
+    sget v11, Lcom/android/mwilky/Renovate;->mQsRamBarFreeBackgroundColor:I
+
+    invoke-static {v10, v11, v4, v12, v13}, Lcom/android/internal/util/ContrastColorUtil;->findContrastColor(IIZD)I
+
+    move-result v10
+
+    invoke-virtual {v9, v10}, Landroid/widget/TextView;->setTextColor(I)V
+
+    goto :goto_ee
+
+    .line 129
+    :cond_e7
+    iget-object v9, v0, Lcom/android/systemui/qs/QSPanel;->mMemoryFreeTextView:Landroid/widget/TextView;
+
+    sget v10, Lcom/android/mwilky/Renovate;->mQsRamBarFreeTextColor:I
+
+    invoke-virtual {v9, v10}, Landroid/widget/TextView;->setTextColor(I)V
+
+    .line 133
+    :goto_ee
+    new-instance v9, Landroid/app/ActivityManager$MemoryInfo;
+
+    invoke-direct {v9}, Landroid/app/ActivityManager$MemoryInfo;-><init>()V
+
+    .line 134
+    .local v9, "memInfo":Landroid/app/ActivityManager$MemoryInfo;
+    iget-object v10, v0, Lcom/android/systemui/qs/QSPanel;->mAm:Landroid/app/ActivityManager;
+
+    invoke-virtual {v10, v9}, Landroid/app/ActivityManager;->getMemoryInfo(Landroid/app/ActivityManager$MemoryInfo;)V
+
+    .line 135
+    const-wide/16 v10, 0x0
+
+    .line 136
+    .local v10, "secServerMem":J
+    iget-object v12, v0, Lcom/android/systemui/qs/QSPanel;->mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+    invoke-virtual {v12}, Lcom/android/mwilky/MemInfoReader;->readMemInfo()V
+
+    .line 137
+    iget-object v12, v0, Lcom/android/systemui/qs/QSPanel;->mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+    invoke-virtual {v12}, Lcom/android/mwilky/MemInfoReader;->getFreeSize()J
+
+    move-result-wide v12
+
+    iget-object v14, v0, Lcom/android/systemui/qs/QSPanel;->mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+    invoke-virtual {v14}, Lcom/android/mwilky/MemInfoReader;->getCachedSize()J
+
+    move-result-wide v14
+
+    add-long/2addr v12, v14
+
+    sub-long/2addr v12, v10
+
+    .line 139
+    .local v12, "availMem":J
+    iget-object v14, v0, Lcom/android/systemui/qs/QSPanel;->mMemInfoReader:Lcom/android/mwilky/MemInfoReader;
+
+    invoke-virtual {v14}, Lcom/android/mwilky/MemInfoReader;->getTotalSize()J
+
+    move-result-wide v14
+
+    .line 141
+    .local v14, "totalMem":J
+    iget-object v7, v0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    move/from16 v16, v5
+
+    .end local v5    # "bottomMargin":I
+    .local v16, "bottomMargin":I
+    sub-long v4, v14, v12
+
+    invoke-static {v7, v4, v5}, Landroid/text/format/Formatter;->formatShortFileSize(Landroid/content/Context;J)Ljava/lang/String;
+
+    move-result-object v4
+
+    .line 142
+    .local v4, "sizeStr":Ljava/lang/String;
+    iget-object v5, v0, Lcom/android/systemui/qs/QSPanel;->mMemoryUsedTextView:Landroid/widget/TextView;
+
+    iget-object v7, v0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    invoke-virtual {v7}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v7
+
+    move-object/from16 v17, v1
+
+    .end local v1    # "lp":Landroid/widget/LinearLayout$LayoutParams;
+    .local v17, "lp":Landroid/widget/LinearLayout$LayoutParams;
+    const-string v1, "string"
+
+    move/from16 v18, v2
+
+    .end local v2    # "sideMargin":I
+    .local v18, "sideMargin":I
+    const-string v2, "service_foreground_processes"
+
+    invoke-static {v2, v1}, Lcom/android/wubydax/GearUtils;->getIdentifier(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v2
+
+    move/from16 v19, v3
+
+    move/from16 v20, v6
+
+    const/4 v3, 0x1
+
+    .end local v3    # "topMargin":I
+    .end local v6    # "hPadding":I
+    .local v19, "topMargin":I
+    .local v20, "hPadding":I
+    new-array v6, v3, [Ljava/lang/Object;
+
+    const/4 v3, 0x0
+
+    aput-object v4, v6, v3
+
+    invoke-virtual {v7, v2, v6}, Landroid/content/res/Resources;->getString(I[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v5, v2}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    .line 143
+    iget-object v2, v0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    invoke-static {v2, v12, v13}, Landroid/text/format/Formatter;->formatShortFileSize(Landroid/content/Context;J)Ljava/lang/String;
+
+    move-result-object v2
+
+    .line 144
+    .end local v4    # "sizeStr":Ljava/lang/String;
+    .local v2, "sizeStr":Ljava/lang/String;
+    iget-object v4, v0, Lcom/android/systemui/qs/QSPanel;->mMemoryFreeTextView:Landroid/widget/TextView;
+
+    iget-object v5, v0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    invoke-virtual {v5}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v5
+
+    const-string v6, "service_background_processes"
+
+    invoke-static {v6, v1}, Lcom/android/wubydax/GearUtils;->getIdentifier(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v1
+
+    const/4 v6, 0x1
+
+    new-array v6, v6, [Ljava/lang/Object;
+
+    aput-object v2, v6, v3
+
+    invoke-virtual {v5, v1, v6}, Landroid/content/res/Resources;->getString(I[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v4, v1}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    .line 146
+    iget-object v1, v0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    long-to-float v3, v14
+
+    long-to-float v4, v12
+
+    sub-float/2addr v3, v4
+
+    long-to-float v4, v14
+
+    div-float/2addr v3, v4
+
+    const/4 v4, 0x0
+
+    invoke-virtual {v1, v3, v4, v4}, Lcom/android/mwilky/LinearColorBar;->setRatios(FFF)V
+
+    .line 147
+    return-void
+.end method
+
+.method public setQsRamBarExpansion(F)V
+    .registers 8
+    .param p1, "f0"    # F
+
+    .line 51
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    if-eqz v0, :cond_25
+
+    sget v0, Lcom/android/mwilky/Renovate;->mQsRamBar:I
+
+    if-eqz v0, :cond_25
+
+    .line 52
+    move v0, p1
+
+    .line 53
+    .local v0, "expansion":F
+    sget v1, Lcom/android/mwilky/Renovate;->mQsRamBar:I
+
+    const/4 v2, 0x1
+
+    if-ne v1, v2, :cond_12
+
+    const v1, 0x3f666666    # 0.9f
+
+    goto :goto_14
+
+    :cond_12
+    const/high16 v1, 0x3f000000    # 0.5f
+
+    .line 54
+    .local v1, "startDelay":F
+    :goto_14
+    const/high16 v2, 0x3f800000    # 1.0f
+
+    sub-float v3, v2, v1
+
+    .line 55
+    .local v3, "span":F
+    sub-float v4, v0, v1
+
+    div-float/2addr v4, v3
+
+    const/4 v5, 0x0
+
+    invoke-static {v4, v5, v2}, Lcom/android/mwilky/MathUtils;->clamp(FFF)F
+
+    move-result v2
+
+    .line 56
+    .local v2, "alpha":F
+    iget-object v4, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v4, v2}, Lcom/android/mwilky/LinearColorBar;->setAlpha(F)V
+
+    .line 58
+    .end local v0    # "expansion":F
+    .end local v1    # "startDelay":F
+    .end local v2    # "alpha":F
+    .end local v3    # "span":F
+    :cond_25
+    return-void
+.end method
+
+.method private createRamBar()V
+    .registers 5
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Ljava/lang/Throwable;
+        }
+    .end annotation
+
+    .line 61
+    new-instance v0, Lcom/android/mwilky/LinearColorBar;
+
+    iget-object v1, p0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    const/4 v2, 0x0
+
+    invoke-direct {v0, v1, v2}, Lcom/android/mwilky/LinearColorBar;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;)V
+
+    iput-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    .line 62
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v0, v1}, Lcom/android/mwilky/LinearColorBar;->setOrientation(I)V
+
+    .line 63
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v0, v1}, Lcom/android/mwilky/LinearColorBar;->setClipChildren(Z)V
+
+    .line 64
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v0, v1}, Lcom/android/mwilky/LinearColorBar;->setClipToPadding(Z)V
+
+    .line 65
+    iget-object v0, p0, Lcom/android/systemui/qs/QSPanel;->mContext:Landroid/content/Context;
+
+    invoke-static {v0}, Landroid/view/LayoutInflater;->from(Landroid/content/Context;)Landroid/view/LayoutInflater;
+
+    move-result-object v0
+
+    .line 66
+    .local v0, "inflater":Landroid/view/LayoutInflater;
+    const-string v1, "linear_color_bar"
+
+    const-string v2, "layout"
+
+    invoke-static {v1, v2}, Lcom/android/wubydax/GearUtils;->getIdentifier(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v1
+
+    iget-object v2, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    const/4 v3, 0x1
+
+    invoke-virtual {v0, v1, v2, v3}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
+
+    .line 67
+    iget-object v1, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    const-string v2, "id"
+
+    const-string v3, "foregroundText"
+
+    invoke-static {v3, v2}, Lcom/android/wubydax/GearUtils;->getIdentifier(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v3
+
+    invoke-virtual {v1, v3}, Lcom/android/mwilky/LinearColorBar;->findViewById(I)Landroid/view/View;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/widget/TextView;
+
+    iput-object v1, p0, Lcom/android/systemui/qs/QSPanel;->mMemoryUsedTextView:Landroid/widget/TextView;
+
+    .line 68
+    iget-object v1, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    const-string v3, "backgroundText"
+
+    invoke-static {v3, v2}, Lcom/android/wubydax/GearUtils;->getIdentifier(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v2
+
+    invoke-virtual {v1, v2}, Lcom/android/mwilky/LinearColorBar;->findViewById(I)Landroid/view/View;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/widget/TextView;
+
+    iput-object v1, p0, Lcom/android/systemui/qs/QSPanel;->mMemoryFreeTextView:Landroid/widget/TextView;
+
+    .line 69
+    new-instance v1, Landroid/widget/LinearLayout$LayoutParams;
+
+    const/4 v2, -0x1
+
+    const/4 v3, -0x2
+
+    invoke-direct {v1, v2, v3}, Landroid/widget/LinearLayout$LayoutParams;-><init>(II)V
+
+    .line 71
+    .local v1, "lp":Landroid/widget/LinearLayout$LayoutParams;
+    iget-object v2, p0, Lcom/android/systemui/qs/QSPanel;->mRamBar:Lcom/android/mwilky/LinearColorBar;
+
+    invoke-virtual {v2, v1}, Lcom/android/mwilky/LinearColorBar;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+
+    .line 72
+    invoke-virtual {p0}, Lcom/android/systemui/qs/QSPanel;->updateRamBarMode()V
+
+    .line 73
     return-void
 .end method
