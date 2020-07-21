@@ -133,7 +133,7 @@
 .end method
 
 .method public static chooseSmartRepliesAndActions(Lcom/android/systemui/statusbar/policy/SmartReplyConstants;Lcom/android/systemui/statusbar/notification/collection/NotificationEntry;)Lcom/android/systemui/statusbar/policy/InflatedSmartReplies$SmartRepliesAndActions;
-    .locals 11
+    .locals 12
 
     iget-object v0, p1, Lcom/android/systemui/statusbar/notification/collection/NotificationEntry;->notification:Landroid/service/notification/StatusBarNotification;
 
@@ -152,15 +152,23 @@
     invoke-virtual {v0, v3}, Landroid/app/Notification;->findRemoteInputActionPair(Z)Landroid/util/Pair;
 
     move-result-object v4
+    
+    const/4 v6, 0x0
 
+    sget-boolean v11, Lcom/android/mwilky/Renovate;->mDisableSmartReplies:Z
+
+    if-eqz v11, :cond_stock
+
+    goto :goto_disable
+
+    :cond_stock
     invoke-virtual {p0}, Lcom/android/systemui/statusbar/policy/SmartReplyConstants;->isEnabled()Z
 
     move-result v5
 
-    const/4 v6, 0x0
-
     if-nez v5, :cond_1
-
+    
+    :goto_disable
     sget-boolean p0, Lcom/android/systemui/statusbar/policy/InflatedSmartReplies;->DEBUG:Z
 
     if-eqz p0, :cond_0
