@@ -2790,7 +2790,7 @@
     return-void
 .end method
 
-.method protected updateBackgroundColors()V
+.method public updateBackgroundColors()V
     .locals 0
 
     invoke-direct {p0}, Lcom/android/systemui/statusbar/notification/row/ActivatableNotificationView;->updateColors()V

@@ -496,6 +496,10 @@
     const/4 v1, 0x0
 
     if-eqz v0, :cond_4
+    
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mMergeNotifications:Z
+
+    if-nez v0, :cond_4
 
     invoke-virtual {p1}, Lcom/android/systemui/statusbar/notification/stack/NotificationSection;->getLastVisibleChild()Lcom/android/systemui/statusbar/notification/row/ActivatableNotificationView;
 
@@ -577,9 +581,14 @@
 
     if-nez v0, :cond_0
 
+	:cond_mw
     return-void
 
     :cond_0
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mMergeNotifications:Z
+
+    if-nez v0, :cond_mw
+
     const/4 v0, 0x0
 
     iput-object v0, p0, Lcom/android/systemui/statusbar/notification/stack/NotificationSectionsManager;->mFirstGentleNotif:Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;

@@ -36,6 +36,8 @@
 
 .method private bindContents()V
     .locals 1
+    
+    invoke-virtual {p0}, Lcom/android/systemui/statusbar/notification/stack/SectionHeaderView;->setHeaderVisibility()V
 
     sget v0, Lcom/android/systemui/R$id;->header_label:I
 
@@ -343,5 +345,31 @@
 
     invoke-virtual {p0, p1}, Landroid/view/ViewGroup;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
+    return-void
+.end method
+
+.method public setHeaderVisibility()V
+    .registers 2
+
+    .line 26
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mMergeNotifications:Z
+
+    if-eqz v0, :cond_a
+
+    .line 27
+    const/16 v0, 0x8
+
+    invoke-virtual {p0, v0}, Lcom/android/systemui/statusbar/notification/stack/SectionHeaderView;->setVisibility(I)V
+
+    goto :goto_e
+
+    .line 29
+    :cond_a
+    const/4 v0, 0x0
+
+    invoke-virtual {p0, v0}, Lcom/android/systemui/statusbar/notification/stack/SectionHeaderView;->setVisibility(I)V
+
+    .line 31
+    :goto_e
     return-void
 .end method
