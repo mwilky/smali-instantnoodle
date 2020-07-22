@@ -8165,7 +8165,22 @@
 
 .method private updateBackground()V
     .locals 5
+    
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mUnlockNotificationColors:Z
+    
+    if-eqz v0, :cond_stock
+    
+    sget v0, Lcom/android/mwilky/Renovate;->mNotificationBackgroundColor:I
+    
+    invoke-static {v0}, Landroid/graphics/Color;->alpha(I)I
 
+    move-result v0
+    
+    const v1, 0xff
+    
+    if-ne v0, v1, :cond_7
+
+    :cond_stock
     iget-boolean v0, p0, Lcom/android/systemui/statusbar/notification/stack/NotificationStackScrollLayout;->mShouldDrawNotificationBackground:Z
 
     if-eqz v0, :cond_7
@@ -8476,7 +8491,22 @@
 
 .method private updateBackgroundDimming()V
     .locals 4
+    
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mUnlockNotificationColors:Z
+    
+    if-eqz v0, :cond_stock
+    
+    sget v0, Lcom/android/mwilky/Renovate;->mNotificationBackgroundColor:I
+    
+    invoke-static {v0}, Landroid/graphics/Color;->alpha(I)I
 
+    move-result v0
+    
+    const v1, 0xff
+    
+    if-ne v0, v1, :cond_1
+
+    :cond_stock
     iget-boolean v0, p0, Lcom/android/systemui/statusbar/notification/stack/NotificationStackScrollLayout;->mShouldDrawNotificationBackground:Z
 
     const-string v1, "StackScroller"
@@ -10249,23 +10279,39 @@
 .end method
 
 .method private updateWillNotDraw()V
-    .locals 2
+    .locals 3
+    
+    const/4 v2, 0x1
+    
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mUnlockNotificationColors:Z
+    
+    if-eqz v0, :cond_stock
+    
+    sget v0, Lcom/android/mwilky/Renovate;->mNotificationBackgroundColor:I
+    
+    invoke-static {v0}, Landroid/graphics/Color;->alpha(I)I
 
+    move-result v0
+    
+    const v1, 0xff
+    
+    if-ne v0, v1, :cond_mw
+
+    :cond_stock
     iget-boolean v0, p0, Lcom/android/systemui/statusbar/notification/stack/NotificationStackScrollLayout;->mShouldDrawNotificationBackground:Z
-
-    const/4 v1, 0x1
 
     if-nez v0, :cond_0
 
+    :cond_mw
     const/4 v0, 0x0
 
     goto :goto_0
 
     :cond_0
-    move v0, v1
+    move v0, v2
 
     :goto_0
-    xor-int/2addr v0, v1
+    xor-int/2addr v0, v2
 
     invoke-virtual {p0, v0}, Landroid/view/ViewGroup;->setWillNotDraw(Z)V
 
@@ -13616,7 +13662,22 @@
 
 .method protected onDraw(Landroid/graphics/Canvas;)V
     .locals 3
+    
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mUnlockNotificationColors:Z
+    
+    if-eqz v0, :cond_stock
+    
+    sget v0, Lcom/android/mwilky/Renovate;->mNotificationBackgroundColor:I
+    
+    invoke-static {v0}, Landroid/graphics/Color;->alpha(I)I
 
+    move-result v0
+    
+    const v1, 0xff
+    
+    if-ne v0, v1, :cond_1
+
+    :cond_stock
     iget-boolean v0, p0, Lcom/android/systemui/statusbar/notification/stack/NotificationStackScrollLayout;->mShouldDrawNotificationBackground:Z
 
     if-eqz v0, :cond_1

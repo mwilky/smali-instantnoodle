@@ -1380,7 +1380,7 @@
 .end method
 
 .method private updateColors()V
-    .locals 2
+    .locals 3
 
     iget-object v0, p0, Landroid/widget/FrameLayout;->mContext:Landroid/content/Context;
 
@@ -1389,7 +1389,14 @@
     invoke-virtual {v0, v1}, Landroid/content/Context;->getColor(I)I
 
     move-result v0
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mUnlockNotificationColors:Z
+    
+    if-eqz v2, :cond_stock
+    
+    sget v0, Lcom/android/mwilky/Renovate;->mNotificationBackgroundColor:I
 
+    :cond_stock
     iput v0, p0, Lcom/android/systemui/statusbar/notification/row/ActivatableNotificationView;->mNormalColor:I
 
     iget-object v0, p0, Landroid/widget/FrameLayout;->mContext:Landroid/content/Context;
