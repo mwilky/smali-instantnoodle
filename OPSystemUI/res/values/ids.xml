@@ -1284,4 +1284,5 @@
     <item type="id" name="zen_radio_buttons" />
     <item type="id" name="zen_radio_buttons_content" />
     <item type="id" name="tweaks_qs_blur" />
+    <item type="id" name="hybrid_notification" />
 </resources>

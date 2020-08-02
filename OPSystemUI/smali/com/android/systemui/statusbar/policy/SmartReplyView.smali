@@ -1498,6 +1498,8 @@
     check-cast p4, Landroid/graphics/drawable/GradientDrawable;
 
     invoke-virtual {p4, p1}, Landroid/graphics/drawable/GradientDrawable;->setColor(I)V
+    
+    sget p2, Lcom/android/mwilky/Renovate;->mNotificationSmartOutlineColor:I
 
     invoke-virtual {p4, p5, p2}, Landroid/graphics/drawable/GradientDrawable;->setStroke(II)V
 
@@ -1505,6 +1507,8 @@
     invoke-virtual {p0, v0}, Landroid/widget/Button;->setBackground(Landroid/graphics/drawable/Drawable;)V
 
     :cond_1
+    sget p3, Lcom/android/mwilky/Renovate;->mNotificationSmartTextColor:I
+
     invoke-virtual {p0, p3}, Landroid/widget/Button;->setTextColor(I)V
 
     return-void

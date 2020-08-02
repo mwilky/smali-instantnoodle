@@ -8,6 +8,18 @@
 
 
 # instance fields
+.field private mTextDividerSecondary:Landroid/widget/TextView;
+
+.field private mHeaderTextSecondary:Landroid/widget/TextView;
+
+.field private mTextDivider:Landroid/widget/TextView;
+
+.field private mTimeDivider:Landroid/widget/TextView;
+
+.field private mHeaderTime:Landroid/widget/TextView;
+
+.field private mHeaderAppName:Landroid/widget/TextView;
+
 .field protected mColor:I
 
 .field private mExpandButton:Lcom/android/internal/widget/NotificationExpandButton;
@@ -51,7 +63,7 @@
 .end method
 
 .method protected constructor <init>(Landroid/content/Context;Landroid/view/View;Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;)V
-    .locals 1
+    .locals 2
 
     invoke-direct {p0, p1, p2, p3}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;-><init>(Landroid/content/Context;Landroid/view/View;Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;)V
 
@@ -103,7 +115,11 @@
 
     invoke-virtual {p1, p2, v0}, Lcom/android/systemui/statusbar/ViewTransformationHelper;->setCustomTransformation(Lcom/android/systemui/statusbar/ViewTransformationHelper$CustomTransformation;I)V
 
-    invoke-virtual {p0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->resolveHeaderViews()V
+    invoke-virtual {p3}, Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;->getStatusBarNotification()Landroid/service/notification/StatusBarNotification;
+
+    move-result-object v1
+    
+    invoke-virtual {p0, v1}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->resolveHeaderViews(Landroid/service/notification/StatusBarNotification;)V
 
     invoke-direct {p0, p3}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->addAppOpsOnClickListener(Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;)V
 
@@ -290,8 +306,6 @@
 
     move-result-object v0
 
-    invoke-virtual {p0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->resolveHeaderViews()V
-
     invoke-virtual {p0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->updateTransformedTypes()V
 
     invoke-direct {p0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->addRemainingTransformTypes()V
@@ -301,6 +315,8 @@
     invoke-virtual {p1}, Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;->getStatusBarNotification()Landroid/service/notification/StatusBarNotification;
 
     move-result-object p1
+    
+    invoke-virtual {p0, p1}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->resolveHeaderViews(Landroid/service/notification/StatusBarNotification;)V
 
     invoke-virtual {p1}, Landroid/service/notification/StatusBarNotification;->getNotification()Landroid/app/Notification;
 
@@ -364,8 +380,18 @@
     return-void
 .end method
 
-.method protected resolveHeaderViews()V
-    .locals 2
+.method protected resolveHeaderViews(Landroid/service/notification/StatusBarNotification;)V
+    .locals 4
+    
+    move-object v3, p1
+    
+    invoke-virtual {v3}, Landroid/service/notification/StatusBarNotification;->getNotification()Landroid/app/Notification;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/app/Notification;->isColorized()Z
+
+    move-result v3
 
     iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
 
@@ -390,7 +416,100 @@
     check-cast v0, Landroid/widget/TextView;
 
     iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderText:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderText:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock
+    
+    if-eqz v3, :cond_nomedia
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media
+    
+    :cond_nomedia    
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
 
+    :cond_stock
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
+
+    const v1, 0x10201bb
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderAppName:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderAppName:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock2
+    
+    if-eqz v3, :cond_nomedia2
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia2
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media2
+    
+    :cond_nomedia2
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media2
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
+
+    :cond_stock2
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
+
+    const v1, 0x1020495
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderTime:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderTime:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock3
+    
+    if-eqz v3, :cond_nomedia3
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia3
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media3
+    
+    :cond_nomedia3
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media3
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
+
+    :cond_stock3
     iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
 
     const v1, 0x1020262
@@ -402,7 +521,160 @@
     check-cast v0, Lcom/android/internal/widget/NotificationExpandButton;
 
     iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mExpandButton:Lcom/android/internal/widget/NotificationExpandButton;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mExpandButton:Lcom/android/internal/widget/NotificationExpandButton;
+    
+    if-eqz v0, :cond_stock4
+    
+    if-nez v3, :cond_stock4
+    
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationExpandButtonColor:I
+    
+    sget-object v1, Landroid/graphics/PorterDuff$Mode;->SRC_ATOP:Landroid/graphics/PorterDuff$Mode;
 
+    invoke-virtual {v0, v2, v1}, Landroid/widget/ImageView;->setColorFilter(ILandroid/graphics/PorterDuff$Mode;)V
+
+    :cond_stock4
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
+
+    const v1, 0x1020499
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mTimeDivider:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mTimeDivider:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock5
+    
+    if-eqz v3, :cond_nomedia5
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia5
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media5
+    
+    :cond_nomedia5    
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media5
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
+
+    :cond_stock5
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
+
+    const v1, 0x10202b2
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mTextDivider:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mTextDivider:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock6
+    
+    if-eqz v3, :cond_nomedia6
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia6
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media6
+    
+    :cond_nomedia6
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media6
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
+
+    :cond_stock6
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
+
+    const v1, 0x10202b3
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderTextSecondary:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mHeaderTextSecondary:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock7
+    
+    if-eqz v3, :cond_nomedia7
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia7
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media7
+    
+    :cond_nomedia7
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media7
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
+
+    :cond_stock7
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
+
+    const v1, 0x10202b4
+
+    invoke-virtual {v0, v1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    iput-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mTextDividerSecondary:Landroid/widget/TextView;
+    
+    iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mTextDividerSecondary:Landroid/widget/TextView;
+    
+    if-eqz v0, :cond_stock8
+    
+    if-eqz v3, :cond_nomedia8
+    
+    sget-boolean v2, Lcom/android/mwilky/Renovate;->mColorMediaNotificationText:Z
+    
+    if-nez v2, :cond_nomedia8
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationTemplateViewWrapper;->resolveMediaTextColors(Landroid/widget/TextView;)I
+    
+    move-result v2
+    
+    goto :goto_media8
+    
+    :cond_nomedia8
+    sget v2, Lcom/android/mwilky/Renovate;->mNotificationHeaderTextColor:I
+    
+    :goto_media8
+    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setTextColor(I)V
+
+    :cond_stock8
     iget-object v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
 
     const v1, 0x10203ca
@@ -440,7 +712,20 @@
     move-result v0
 
     iput v0, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mColor:I
+    
+    if-eqz v3, :cond_nomedia9
+    
+    invoke-static {v0}, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->resolveMediaColors(I)I
+    
+    move-result v0
+    
+    iget-object v1, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationHeaderViewWrapper;->mIcon:Landroid/widget/ImageView;
+    
+    sget-object v2, Landroid/graphics/PorterDuff$Mode;->SRC_ATOP:Landroid/graphics/PorterDuff$Mode;
 
+    invoke-virtual {v1, v0, v2}, Landroid/widget/ImageView;->setColorFilter(ILandroid/graphics/PorterDuff$Mode;)V
+
+    :cond_nomedia9
     return-void
 .end method
 
@@ -569,4 +854,38 @@
 
     :cond_0
     return-void
+.end method
+
+.method public static resolveMediaColors(I)I
+    .registers 4
+    .param p0, "color"    # I
+
+    .line 14
+    sget-boolean v0, Lcom/android/mwilky/Renovate;->mUnlockNotificationColors:Z
+
+    if-eqz v0, :cond_13
+
+    .line 15
+    invoke-static {}, Lcom/android/systemui/SystemUIApplication;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    .line 16
+    .local v0, "mContext":Landroid/content/Context;
+    sget v1, Lcom/android/mwilky/Renovate;->mNotificationBackgroundColor:I
+
+    invoke-static {v0}, Lcom/oneplus/util/OpUtils;->isGoogleDarkTheme(Landroid/content/Context;)Z
+
+    move-result v2
+
+    invoke-static {v0, p0, v1, v2}, Lcom/android/internal/util/ContrastColorUtil;->resolveContrastColor(Landroid/content/Context;IIZ)I
+
+    move-result v1
+
+    return v1
+
+    .line 18
+    .end local v0    # "mContext":Landroid/content/Context;
+    :cond_13
+    return p0
 .end method

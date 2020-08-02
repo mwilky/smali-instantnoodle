@@ -17,7 +17,17 @@
 .end method
 
 .method private resolveViews(Landroid/service/notification/StatusBarNotification;)V
-    .locals 1
+    .locals 2
+    
+    move-object v1, p1
+    
+    invoke-virtual {v1}, Landroid/service/notification/StatusBarNotification;->getNotification()Landroid/app/Notification;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Landroid/app/Notification;->isColorized()Z
+
+    move-result v1
 
     iget-object p1, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationViewWrapper;->mView:Landroid/view/View;
 
@@ -30,7 +40,18 @@
     check-cast p1, Lcom/android/internal/widget/ImageFloatingTextView;
 
     iput-object p1, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationBigTextTemplateViewWrapper;->mBigtext:Lcom/android/internal/widget/ImageFloatingTextView;
+    
+    iget-object p1, p0, Lcom/android/systemui/statusbar/notification/row/wrapper/NotificationBigTextTemplateViewWrapper;->mBigtext:Lcom/android/internal/widget/ImageFloatingTextView;
+    
+    if-eqz p1, :cond_stock
+    
+    if-nez v1, :cond_stock
+    
+    sget v1, Lcom/android/mwilky/Renovate;->mNotificationSummaryTextColor:I
+    
+    invoke-virtual {p1, v1}, Landroid/widget/TextView;->setTextColor(I)V
 
+    :cond_stock
     return-void
 .end method
 
