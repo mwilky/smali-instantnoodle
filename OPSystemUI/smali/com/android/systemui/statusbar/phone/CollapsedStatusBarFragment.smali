@@ -601,6 +601,8 @@
     if-nez p2, :cond_5
 
     iget-object p2, p0, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->mClockController:Lcom/android/systemui/statusbar/phone/ClockController;
+    
+    invoke-virtual {p2}, Lcom/android/systemui/statusbar/phone/ClockController;->updateActiveClock()V
 
     invoke-virtual {p2}, Lcom/android/systemui/statusbar/phone/ClockController;->getClock()Lcom/android/systemui/statusbar/policy/Clock;
 
@@ -634,27 +636,38 @@
 .end method
 
 .method public hideClock(Z)V
-    .locals 3
+    .locals 4
 
     iget-object v0, p0, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->mClockController:Lcom/android/systemui/statusbar/phone/ClockController;
+    
+    invoke-virtual {v0}, Lcom/android/systemui/statusbar/phone/ClockController;->updateActiveClock()V
 
     invoke-virtual {v0}, Lcom/android/systemui/statusbar/phone/ClockController;->getClock()Lcom/android/systemui/statusbar/policy/Clock;
 
     move-result-object v0
     
-    iget-object v2, p0, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->mClockController:Lcom/android/systemui/statusbar/phone/ClockController;
-    
-    iget-object v2, v2, Lcom/android/systemui/statusbar/phone/ClockController;->mLeftClock:Lcom/android/systemui/statusbar/policy/Clock;
-    
-    if-ne v0, v2, :cond_mw
+    iget-object v3, p0, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->mKeyguardMonitor:Lcom/android/systemui/statusbar/policy/KeyguardMonitor;
 
+    invoke-interface {v3}, Lcom/android/systemui/statusbar/policy/KeyguardMonitor;->isShowing()Z
+    
+    move-result v3
+    
+    if-nez v3, :cond_keyguard
+    
+    iget-object v3, p0, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->mClockController:Lcom/android/systemui/statusbar/phone/ClockController;
+    
+    iget-object v3, v3, Lcom/android/systemui/statusbar/phone/ClockController;->mLeftClock:Lcom/android/systemui/statusbar/policy/Clock;
+    
+    if-ne v3, v0, :cond_exit
+    
+    :cond_keyguard
     invoke-direct {p0}, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->clockHiddenMode()I
 
     move-result v1
 
     invoke-direct {p0, v0, v1, p1}, Lcom/android/systemui/statusbar/phone/CollapsedStatusBarFragment;->animateHiddenState(Landroid/view/View;IZ)V
 
-    :cond_mw
+    :cond_exit
     return-void
 .end method
 
