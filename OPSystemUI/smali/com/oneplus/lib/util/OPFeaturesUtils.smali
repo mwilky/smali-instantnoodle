@@ -18,69 +18,166 @@
     return-void
 .end method
 
-.method public static isSupportXVibrate()Z
-    .locals 6
+.method public static isBillie2OrBillie8Products()Z
+    .locals 4
 
-    const/4 v0, 0x0
+    const-string v0, "ro.boot.project_codename"
 
-    :try_start_0
-    sget-object v1, Lcom/oneplus/lib/util/OPFeaturesUtils;->sOPFeatures:Ljava/lang/Class;
+    invoke-static {v0}, Lcom/oneplus/lib/util/ReflectUtil;->get(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v1, "billie2"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
+    const-string v1, "billie2t"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
+    const-string v1, "billie8"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
+    const-string v1, "billie8t"
+
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
 
     if-eqz v1, :cond_0
 
-    sget-object v1, Lcom/oneplus/lib/util/OPFeaturesUtils;->sIsSupport:Ljava/lang/reflect/Method;
+    goto :goto_0
 
-    if-nez v1, :cond_1
+    :cond_0
+    const/4 v1, 0x0
+
+    goto :goto_1
+
+    :cond_1
+    :goto_0
+    const/4 v1, 0x1
+
+    :goto_1
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "isBillie2OrBillie8Products ret : "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+    const-string v3, " , product : "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    const-string v2, "OPFeaturesUtils"
+
+    invoke-static {v2, v0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    return v1
+.end method
+
+.method public static isSupportXVibrate()Z
+    .locals 7
+
+    const/4 v0, 0x0
+
+    const/4 v1, 0x1
+
+    :try_start_0
+    sget-object v2, Lcom/oneplus/lib/util/OPFeaturesUtils;->sOPFeatures:Ljava/lang/Class;
+
+    if-eqz v2, :cond_0
+
+    sget-object v2, Lcom/oneplus/lib/util/OPFeaturesUtils;->sIsSupport:Ljava/lang/reflect/Method;
+
+    if-nez v2, :cond_1
 
     :cond_0
     invoke-static {}, Lcom/oneplus/lib/util/OPFeaturesUtils;->loadFeatures()V
 
     :cond_1
-    sget-object v1, Lcom/oneplus/lib/util/OPFeaturesUtils;->sOPFeatures:Ljava/lang/Class;
+    sget-object v2, Lcom/oneplus/lib/util/OPFeaturesUtils;->sOPFeatures:Ljava/lang/Class;
 
-    const-string v2, "OP_FEATURE_X_LINEAR_VIBRATION_MOTOR"
+    const-string v3, "OP_FEATURE_X_LINEAR_VIBRATION_MOTOR"
 
-    invoke-virtual {v1, v2}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
+    invoke-virtual {v2, v3}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
 
-    move-result-object v1
+    move-result-object v2
 
-    sget-object v2, Lcom/oneplus/lib/util/OPFeaturesUtils;->sIsSupport:Ljava/lang/reflect/Method;
+    sget-object v3, Lcom/oneplus/lib/util/OPFeaturesUtils;->sIsSupport:Ljava/lang/reflect/Method;
 
-    const/4 v3, 0x1
+    invoke-virtual {v3, v1}, Ljava/lang/reflect/Method;->setAccessible(Z)V
 
-    invoke-virtual {v2, v3}, Ljava/lang/reflect/Method;->setAccessible(Z)V
+    invoke-virtual {v2, v1}, Ljava/lang/reflect/Field;->setAccessible(Z)V
 
-    invoke-virtual {v1, v3}, Ljava/lang/reflect/Field;->setAccessible(Z)V
+    sget-object v3, Lcom/oneplus/lib/util/OPFeaturesUtils;->sIsSupport:Ljava/lang/reflect/Method;
 
-    sget-object v2, Lcom/oneplus/lib/util/OPFeaturesUtils;->sIsSupport:Ljava/lang/reflect/Method;
+    new-array v4, v1, [Ljava/lang/Object;
 
-    new-array v4, v3, [Ljava/lang/Object;
+    new-array v5, v1, [I
 
-    new-array v3, v3, [I
+    const/4 v6, 0x0
 
-    const/4 v5, 0x0
+    invoke-virtual {v2, v6}, Ljava/lang/reflect/Field;->getInt(Ljava/lang/Object;)I
 
-    invoke-virtual {v1, v5}, Ljava/lang/reflect/Field;->getInt(Ljava/lang/Object;)I
+    move-result v2
 
-    move-result v1
+    aput v2, v5, v0
 
-    aput v1, v3, v0
+    aput-object v5, v4, v0
 
-    aput-object v3, v4, v0
+    invoke-virtual {v3, v6, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 
-    invoke-virtual {v2, v5, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+    move-result-object v2
 
-    move-result-object v1
+    check-cast v2, Ljava/lang/Boolean;
 
-    check-cast v1, Ljava/lang/Boolean;
+    invoke-virtual {v2}, Ljava/lang/Boolean;->booleanValue()Z
 
-    invoke-virtual {v1}, Ljava/lang/Boolean;->booleanValue()Z
-
-    move-result v0
+    move-result v2
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
+    goto :goto_0
+
     :catch_0
+    move v2, v0
+
+    :goto_0
+    if-nez v2, :cond_2
+
+    invoke-static {}, Lcom/oneplus/lib/util/OPFeaturesUtils;->isBillie2OrBillie8Products()Z
+
+    move-result v2
+
+    if-eqz v2, :cond_3
+
+    :cond_2
+    move v0, v1
+
+    :cond_3
     return v0
 .end method
 
